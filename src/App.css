@@ -1,0 +1,148 @@
+.bf-homepage-nav-top {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid lightgray;
+}
+
+.bf-homepage-nav-top > .bf-button-links {
+  margin-left: auto;
+}
+
+.bf-logo {
+  width: 128px;
+}
+
+.bf-button-links {
+  display: flex;
+  gap: 16px;
+}
+
+.bf-button-link {
+  border-radius: 20px;
+  padding: 12px 24px;
+}
+
+.bf-button-link-start-posting {
+  background-color: var(--primary-colour);
+  color: white;
+}
+
+.bf-button-link-sign-in {
+  color: var(--primary-colour);
+  border: 1px solid var(--primary-colour);
+}
+
+.bf-homepage-nav-middle {
+  min-height: 512px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bf-homepage-nav-middle > h3 {
+  max-width: 480px;
+}
+
+.bf-homepage-heading {
+  font-weight: 500;
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.bf-homepage-feature-heading {
+  font-weight: 500;
+  font-size: 32px;
+  text-align: center;
+  margin: 0px;
+  margin-bottom: 24px;
+}
+
+.bf-main-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--max-container-width);
+}
+
+.bf-homepage-feature-list {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(512px, 1fr));
+}
+
+.bf-homepage-feature-desc {
+  max-width: 512px;
+  border: 1px solid var(--primary-colour);
+  padding: 16px 32px;
+  border-radius: 8px;
+}
+
+.bf-homepage-feature-desc > p {
+  line-height: 1.5;
+  margin-bottom: 12px;
+  text-indent: 30px;
+}
+
+.bf-button-link-feature-create-your-blog {
+  border-radius: 20px;
+  padding: 12px 24px;
+  display: inline-block;
+
+  color: var(--primary-colour);
+  border: 1px solid var(--primary-colour);
+}
+
+#error-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+/*
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+*/
