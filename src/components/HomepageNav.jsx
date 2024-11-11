@@ -67,12 +67,14 @@ function NavTop({ forSignIn=false, forSignUp=false }) {
   } else if (forSignIn) {
     renderables = (
       <>
+        <p style={{ color: "gray" }}>Do not have an account?</p>
         <NavButtonStartPosting />
       </>
     );
   } else if (forSignUp) {
     renderables = (
       <>
+        <p style={{ color: "gray" }}>Already have an account?</p>
         <NavButtonSignIn />
       </>
     );

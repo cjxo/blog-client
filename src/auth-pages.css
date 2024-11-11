@@ -1,4 +1,4 @@
-.bf-sign-up-section {
+.bf-sign-up-section, .bf-sign-in-section {
   display: flex;
   flex-direction: column;
   margin: auto;

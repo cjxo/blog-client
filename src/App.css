@@ -16,6 +16,7 @@
 .bf-button-links {
   display: flex;
   gap: 16px;
+  align-items: center;
 }
 
 .bf-button-link {
