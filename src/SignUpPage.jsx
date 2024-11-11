@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "./components/HomepageFooter.jsx";
 import BlogForgeEmphasis from "./components/BlogForgeEmphasis.jsx";
 import { LabelInputPair } from "./components/input-helper.jsx";
@@ -7,12 +8,12 @@ import "./auth-pages.css";
 export default function SignUpPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [birthDate, setBirthDate] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,8 +23,38 @@ export default function SignUpPage() {
       return;
     }
 
+    // TODO: use Navigate in react-router-dom to prevent signinig up again!
     // TODO: FETCHING HERE!
-    setError('');
+    fetch("http://localhost:3000/auth/sign-up", {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        first_name: firstName,
+        last_name: lastName,
+        username: username,
+        email: email,
+        password: password,
+      }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(errorData => {
+            setError(errorData.message || 'Something went wrong. Please try again.');
+            throw new Error(errorData.message || 'Something went wrong. Please try again.');
+          });
+        } else {
+          setError('');
+          return response.json();
+        }
+      })
+      .then(data => {
+        console.log(data);
+        navigate("/sign-in?signUpSuccess=true");
+      })
+      .catch(err => console.error(err));
   };
 
   const toOnChange = (fn) => {
@@ -37,7 +68,7 @@ export default function SignUpPage() {
       <section className="bf-sign-up-section">
         <form method="post" onSubmit={handleSubmit}>
           <h1>Sign Up To <BlogForgeEmphasis /></h1>
-          <p className={`form-error-msg ${error ? 'visible' : ''}`}>{error}</p>
+          <p className={`form-error-msg ${error ? 'error' : ''}`}>{error}</p>
           <LabelInputPair
             inputType="text"
             labelName="first-name"
@@ -51,13 +82,6 @@ export default function SignUpPage() {
             inputName="Last Name"
             value={lastName}
             onChange={toOnChange(setLastName)}
-          />
-          <LabelInputPair
-            inputType="date"
-            labelName="birth-date"
-            inputName="Birth Date"
-            value={birthDate}
-            onChange={toOnChange(setBirthDate)}
           />
           <LabelInputPair
             inputType="text"

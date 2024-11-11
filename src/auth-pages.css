@@ -33,14 +33,20 @@ input {
 
 .form-error-msg {
   margin: 0px;
-  background-color: #ec5c5c;
   color: white;
   padding: 12px 18px;
   border-radius: 8px;
   display: none;
+  max-width: 512px;
 }
 
-.form-error-msg.visible {
+.form-error-msg.error {
+  background-color: #ec5c5c;
+  display: block;
+}
+
+.form-error-msg.success {
+  background-color: #5eed5c;
   display: block;
 }
 
