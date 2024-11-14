@@ -1,11 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import App from './App.jsx';
-import SignUpPage from './SignUpPage.jsx';
-import SignInPage from './SignInPage.jsx';
-import ErrorPage from './ErrorPage.jsx';
-import FeatureList from "./FeatureList.jsx";
+import WelcomePage from './pages/notauth/Welcome.jsx';
+import SignUpPage from './pages/notauth/SignUp.jsx';
+import SignInPage from './pages/notauth/SignIn.jsx';
+import WelcomeErrorPage from './pages/notauth/WelcomeError.jsx';
+import FeatureList from "./pages/notauth/FeatureList.jsx"
+import HomePage from "./pages/auth/HomePage.jsx"
+import { AuthProvider } from "./components/AuthProvider.jsx"
 
 import {
   createBrowserRouter,
@@ -15,8 +17,8 @@ import {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
+    element: <WelcomePage />,
+    errorElement: <WelcomeErrorPage />,
     children: [
       {
         path: "/",
@@ -29,13 +31,19 @@ const router = createBrowserRouter([
       {
         path: "sign-in",
         element: <SignInPage />
-      }
+      }, 
     ]
   },
+  {
+    path: "home",
+    element: <HomePage />
+  }
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 )

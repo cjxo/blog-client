@@ -47,9 +47,4 @@ LabelInputPair.propTypes = {
   inputType: PropTypes.string.isRequired,
   labelName: PropTypes.string.isRequired,
   inputName: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
-  onChange: PropTypes.func.isRequired,
 };

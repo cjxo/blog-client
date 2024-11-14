@@ -1,10 +1,12 @@
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   NavButtonStartPosting,
   NavButtonExploreUserPosts,
   NavLinks,
-} from "./components/HomepageNav.jsx";
-import BlogForgeEmphasis from "./components/BlogForgeEmphasis.jsx";
+} from "../../components/HomepageNav.jsx";
+import BlogForgeEmphasis from "../../components/BlogForgeEmphasis.jsx";
 
 function FeatureLiEntry({ title, explanation }) {
   return (

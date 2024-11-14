@@ -7,7 +7,7 @@
   min-height: 512px;
 }
 
-h1 {
+.bf-auth-header {
   text-align: center;
   margin: 0px;
   margin-bottom: 8px;
@@ -50,7 +50,7 @@ input {
   display: block;
 }
 
-button {
+.bf-submit-fields {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid transparent;
@@ -63,7 +63,7 @@ button {
   margin-top: 8px;
 }
 
-button:hover {
+.bf-submit-fields:hover {
   background-color: white;
   border: 1px solid var(--primary-colour);
   color: black;

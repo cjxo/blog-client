@@ -1,0 +1,52 @@
+:root {
+  --main-colour0: #181C14;
+  --main-colour1: #3C3D37;
+  --main-colour2: #697565;
+  --main-colour3: #ECDFCC;
+  --main-text-colour0: #f4fdeb;
+}
+
+html, body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.bf-main-homepage {
+  display: flex;
+  height: 100%;
+}
+
+.bf-side-bar {
+  background-color: var(--main-colour0);
+  color: var(--main-text-colour0);
+  border-right: 1px solid var(--main-colour2);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.bf-content-display-area {
+  flex-grow: 1;
+  background-color: var(--main-colour0);
+  color: var(--main-text-colour0);
+}
+
+.bf-header {
+  border-bottom: 1px solid var(--main-colour2);
+}
+
+.bf-page-title {
+  padding: 16px;
+  text-align: center;
+}
+
+.bf-logo-home {
+  width: 64px;
+  border-radius: 8px;
+}

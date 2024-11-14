@@ -1,8 +1,8 @@
 import { useRouteError } from "react-router-dom";
-import { NavTop } from "./components/HomepageNav.jsx";
-import Footer from "./components/HomepageFooter.jsx";
+import { NavTop } from "../../components/HomepageNav.jsx";
+import Footer from "../../components/HomepageFooter.jsx";
 
-export default function ErrorPage() {
+const WelcomeErrorPage = () => {
   const error = useRouteError();
   console.error(error);
 
@@ -22,3 +22,5 @@ export default function ErrorPage() {
     </>
   );
 }
+
+export default WelcomeErrorPage;
