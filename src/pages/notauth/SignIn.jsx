@@ -35,7 +35,7 @@ const SignInPage = () => {
 
   return (
     <>
-      <section className="bf-sign-in-section">
+      <section className="bf-auth-section bf-sign-in-section">
         <form method="post" onSubmit={handleSubmit}>
           <h1 className="bf-auth-header">Sign In To <BlogForgeEmphasis /></h1>
           {

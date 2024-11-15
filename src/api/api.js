@@ -96,8 +96,73 @@ const signout = async () => {
   try {
     const response = await fetch("http://localhost:3000/auth/sign-out", {
       mode: "cors",
-      method: "POST",
+      method: "DELETE",
       credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      result.ok = false;
+      result.message = errData.message;
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+    }
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return result;
+};
+
+const acquireEntirePosts = async () => {
+  const result = {
+    ok: true,
+    message: "",
+    posts: [],
+  };
+
+  try {
+    const response = await fetch("http://localhost:3000/posts", {
+      mode: "cors",
+      credentials: "include",
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      result.ok = false;
+      result.message = errData.message;
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+      result.posts = data.posts;
+    }
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return result;
+};
+
+const createPost = async (title, content, published, token) => {
+  const result = {
+    ok: true,
+    message: "",
+  };
+
+  try {
+    const response = await fetch("http://localhost:3000/posts", {
+      mode: "cors",
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, content, published })
     });
 
     if (!response.ok) {
@@ -121,4 +186,6 @@ export default {
   signup,
   getAccessToken,
   signout,
+  acquireEntirePosts,
+  createPost,
 };

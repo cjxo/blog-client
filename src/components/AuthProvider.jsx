@@ -37,11 +37,13 @@ const AuthProvider = ({ children }) => {
   };
 
   const signout = async () => {
+    const result = await api.signout();
     setToken(null);
+    return result;
   };
 
   return (
-    <AuthContext.Provider value={{token, signin, signup, fetchAccessToken}}>
+    <AuthContext.Provider value={{token, signin, signup, signout, fetchAccessToken}}>
       {children}
     </AuthContext.Provider>
   );

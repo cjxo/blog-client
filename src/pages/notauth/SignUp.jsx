@@ -47,7 +47,7 @@ const SignUpPage = () => {
 
   return (
     <>
-      <section className="bf-sign-up-section">
+      <section className="bf-auth-section bf-sign-up-section">
         <form method="post" onSubmit={handleSubmit}>
           <h1 className="bf-auth-header">Sign Up To <BlogForgeEmphasis /></h1>
           <p className={`form-error-msg ${error ? 'error' : ''}`}>{error}</p>

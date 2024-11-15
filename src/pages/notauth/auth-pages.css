@@ -1,4 +1,4 @@
-.bf-sign-up-section, .bf-sign-in-section {
+.bf-auth-section {
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -13,7 +13,7 @@
   margin-bottom: 8px;
 }
 
-form {
+.bf-auth-section form {
   margin: 16px;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@ form {
   border-radius: 8px;
 }
 
-input {
+.bf-auth-section input {
   padding: 12px 18px;
   width: 100%;
   border-radius: 8px;

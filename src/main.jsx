@@ -7,6 +7,9 @@ import SignInPage from './pages/notauth/SignIn.jsx';
 import WelcomeErrorPage from './pages/notauth/WelcomeError.jsx';
 import FeatureList from "./pages/notauth/FeatureList.jsx"
 import HomePage from "./pages/auth/HomePage.jsx"
+import AccountPage from "./pages/auth/Account.jsx"
+import DisplayPostsPage from "./pages/auth/DisplayPosts.jsx"
+import CreatePostPage from "./pages/auth/CreatePost.jsx"
 import { AuthProvider } from "./components/AuthProvider.jsx"
 
 import {
@@ -35,8 +38,23 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: "home",
-    element: <HomePage />
+    path: "/home",
+    element: <HomePage />,
+    errorElement: <WelcomeErrorPage />,
+    children: [
+      {
+        path: "/home",
+        element: <DisplayPostsPage />
+      },
+      {
+        path: "account",
+        element: <AccountPage />
+      },
+      {
+        path: "add-post",
+        element: <CreatePostPage />
+      },
+    ]
   }
 ]);
 
