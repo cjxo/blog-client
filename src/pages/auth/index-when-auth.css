@@ -104,9 +104,11 @@ html, body {
 }
 
 .bf-posts-grid-display {
-  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 12px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .bf-post-card {
@@ -118,6 +120,8 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  margin-bottom: 16px;
 }
 
 .bf-post-title {
@@ -140,4 +144,34 @@ html, body {
 .bf-post-card-interactables {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.bf-post-expanded-root > h1 {
+  font-size: 32px;
+}
+
+.bf-post-details {
+  color: rgba(128, 128, 128, 1);
+  display: flex;
+  gap: 16px;
+}
+
+.bf-read-more-btn {
+  color: var(--main-colour1);
+  background-color: var(--main-colour3);
+  border: 1px solid transparent;
+
+  padding: 8px 16px;
+  border-radius: 4px;
+
+  transition-property: color background-color border;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+.bf-read-more-btn:hover {
+  color: var(--main-text-colour0);
+  border: 1px solid var(--main-colour2); 
+  background-color: var(--main-colour0);
 }

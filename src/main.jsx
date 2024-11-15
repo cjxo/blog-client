@@ -10,6 +10,7 @@ import HomePage from "./pages/auth/HomePage.jsx"
 import AccountPage from "./pages/auth/Account.jsx"
 import DisplayPostsPage from "./pages/auth/DisplayPosts.jsx"
 import CreatePostPage from "./pages/auth/CreatePost.jsx"
+import PostPage from "./pages/auth/Post.jsx"
 import { AuthProvider } from "./components/AuthProvider.jsx"
 
 import {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "add-post",
         element: <CreatePostPage />
+      },
+      {
+        path: "post/:id",
+        element: <PostPage />,
       },
     ]
   }
