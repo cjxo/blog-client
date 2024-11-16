@@ -7,7 +7,7 @@ const WelcomeErrorPage = () => {
   console.error(error);
 
   return (
-    <>
+    <div style={{flexGrow:1}}>
       <nav>
         <NavTop />
       </nav>
@@ -19,7 +19,7 @@ const WelcomeErrorPage = () => {
         </p>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

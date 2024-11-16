@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Link, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../../components/AuthProvider.jsx";
 import Icon from '@mdi/react';
@@ -48,10 +49,32 @@ const HomePage = () => {
       return <Navigate to="/sign-in" />;
   }
 
+  const [maxContainerHeight, setMaxContainerHeight] = useState(0);
+
+  useEffect(() => {
+    const updateMaxHeight = () => {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerHeight
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetHeight
+      const headerHeight = document.querySelector(".bf-header").offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const maxHeight = viewportHeight - headerHeight;
+      setMaxContainerHeight(maxHeight);
+    };
+
+    updateMaxHeight();
+
+    window.addEventListener('resize', updateMaxHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateMaxHeight);
+    };
+  }, []);
+
   const [selectedSidebar, setSelectedSidebar] = useState(0);
   const sidebarNames = [
     "Home", "Inbox", "Notifications", "Add Post", "Profile"
   ];
+
   const sidebarLinks = [
     {
       name: "/home",
@@ -106,7 +129,7 @@ const HomePage = () => {
             <h1 className="bf-page-title">{sidebarNames[selectedSidebar]}</h1>
           </header>
           
-          <section className="bf-main-display">
+          <section className="bf-main-display" style={{maxHeight: maxContainerHeight}}>
             <Outlet />
           </section>
         </section>
@@ -116,3 +139,15 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+SidebarIcon.propTypes = {
+  mdil: PropTypes.any.isRequired,
+  color: PropTypes.string.isRequired,
+};
+
+LinkIcon.propTypes = {
+  mdil: PropTypes.any.isRequired,
+  link: PropTypes.string.isRequired,
+  selected: PropTypes.bool,
+  setSelected: PropTypes.func,
+};

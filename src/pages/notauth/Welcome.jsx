@@ -20,16 +20,18 @@ const WelcomePage = () => {
   const location = useLocation();
   return (
     <>
-      <nav>
-        <NavTop
-          forSignIn={location.pathname === '/sign-in'}
-          forSignUp={location.pathname === '/sign-up'}
-        />
-      </nav>
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
+      <div style={{flexGrow:1}}>
+        <nav>
+          <NavTop
+            forSignIn={location.pathname === '/sign-in'}
+            forSignUp={location.pathname === '/sign-up'}
+          />
+        </nav>
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </>
   )
 }

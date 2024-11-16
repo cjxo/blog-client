@@ -23,6 +23,12 @@ a {
   color: black;
 }
 
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   padding: 0px;
   margin: 0px;
