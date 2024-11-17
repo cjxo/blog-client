@@ -253,3 +253,13 @@
   gap: 16px;
   margin-left: auto;
 }
+
+.bf-comment-interaction button {
+  border: 1px solid transparent;
+  background-color: transparent;
+}
+
+.bf-post-interactables {
+  width: 26px;
+  height: 26px;
+}

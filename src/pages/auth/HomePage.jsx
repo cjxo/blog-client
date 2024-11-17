@@ -13,16 +13,6 @@ import {
 import BlogForgePng from "../../../public/icons/Blog-Forge-Just-Logo.png";
 import "./index-when-auth.css";
 
-const SidebarIcon = ({ mdil, color="white" }) => {
-  return (
-    <Icon
-      path={mdil}
-      size={1.5}
-      color={color}
-    />
-  );
-};
-
 const LinkIcon = ({ mdil, link, selected=false, setSelected=()=>{} }) => {
   const [hover, setHover] = useState(false);
   return (
@@ -33,11 +23,10 @@ const LinkIcon = ({ mdil, link, selected=false, setSelected=()=>{} }) => {
       onMouseLeave={() => setHover(false)}
       onClick={() => setSelected()}
     >
-      <SidebarIcon
-        mdil={mdil}
-        color={
-          selected ? "white" : (hover ? "white" : "#697565")
-        }
+      <Icon
+        path={mdil}
+        color={selected ? "white" : (hover ? "white" : "#697565")}
+        size={1.5}
       />
     </Link>
   );
@@ -139,11 +128,6 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-SidebarIcon.propTypes = {
-  mdil: PropTypes.any.isRequired,
-  color: PropTypes.string.isRequired,
-};
 
 LinkIcon.propTypes = {
   mdil: PropTypes.any.isRequired,
