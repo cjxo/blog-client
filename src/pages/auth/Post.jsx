@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import useAuth from "../../components/AuthProvider.jsx";
+import api from "../../api/api.js";
 
 const PostInteractableButton = ({ defaultColour="#697565", hoveredColour="#e0a01f", type="thumbs-up", activated=false, setActivated=()=>{} }) => {
   const [hovered, setHovered] = useState(false);
@@ -51,9 +53,41 @@ const PostInteractableButton = ({ defaultColour="#697565", hoveredColour="#e0a01
     </button>
   );
 };
-  
+
 const PostPage = () => {
   const { state } = useLocation();
+  const auth = useAuth();
+  const [comments, setComments] = useState([]);
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+
+    api
+      .postComment(auth.token, state.id, fd.get("bf-comment-content"))
+      .then(result => {
+        if (result.ok) {
+          e.target.reset();
+          setComments([result.commentDetail, ...comments])
+        } else {
+          console.error(result.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const fetched = await api.getAllComments(auth.token, state.id);
+      if (fetched.ok) {
+        setComments(fetched.comments);
+      } else {
+          console.error(fetched.message);
+      }
+    };
+
+    fetchComments();
+  }, []);
+
   return (
     <div className="bf-post-expanded-root">
       <h1>{state.title}</h1>
@@ -75,40 +109,51 @@ const PostPage = () => {
 
       <div className="bf-divider"></div>
       <div className="bf-comment-section">
-        <form>
-          <textarea rows="4" placeholder="Add comment ...">
+        <form onSubmit={handleCommentSubmit}>
+          <textarea rows="4" name="bf-comment-content" placeholder="Add comment ...">
           </textarea>
           <button>Submit</button>
         </form>
         <div className="bf-comment-header">
           <h3>Comments</h3>
-          <div>0</div>
+          <div>{comments.length}</div>
         </div>
         <div className="bf-comments">
-          <div className="bf-comment">
-            <div className="bf-comment-quick-info">
-              <div
-                className="todo-actually-change-to-user-profile"
-                style={
-                  {
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    backgroundColor: "var(--main-colour3)"
-                  }
-                }
-              >
-              </div>
-              <div>usernamehere</div>
-            </div>
-            <p>
-              Actual Comment is written here!!!!! Amazing Comment about the post!
-            </p>
-            <div className="bf-comment-interaction">
-              <PostInteractableButton type="thumbs-up" hoveredColour={"#6fd465"} />
-              <PostInteractableButton type="thumbs-down" hoveredColour={"#d47266"} />
-            </div>
-          </div>
+          {
+            comments.map(comment => {
+              return (
+                <div key={comment.id} className="bf-comment">
+                  <div className="bf-comment-quick-info">
+                    <div
+                      className="todo-actually-change-to-user-profile"
+                      style={
+                        {
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "50%",
+                          backgroundColor: "var(--main-colour3)"
+                        }
+                      }
+                    >
+                    </div>
+                    <div>{comment.username}</div>
+                  </div>
+                  <p>{comment.content}</p>
+                  <div className="bf-comment-interaction">
+                    <div>
+                      <PostInteractableButton type="thumbs-up" hoveredColour={"#6fd465"} />
+                      <p>{comment.likes}</p>
+                    </div>
+
+                    <div>
+                      <PostInteractableButton type="thumbs-down" hoveredColour={"#d47266"} />
+                      <p>{comment.dislikes}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          } 
         </div>
       </div>
     </div>

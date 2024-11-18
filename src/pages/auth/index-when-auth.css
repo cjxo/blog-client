@@ -231,6 +231,9 @@
 
 .bf-comments {
   margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .bf-comment-quick-info {
@@ -239,13 +242,16 @@
   gap: 12px;
 }
 
-.bf-comment > p{
+.bf-comment > p {
   margin: 16px 0px;
 }
 
 .bf-comment {
   display: flex;
   flex-direction: column;
+  border: 2px solid var(--main-colour1);
+  padding: 16px;
+  border-radius: 8px;
 }
 
 .bf-comment-interaction {
@@ -257,6 +263,10 @@
 .bf-comment-interaction button {
   border: 1px solid transparent;
   background-color: transparent;
+}
+
+.bf-comment-interaction p {
+  text-align: center;
 }
 
 .bf-post-interactables {

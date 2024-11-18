@@ -181,6 +181,81 @@ const createPost = async (title, content, published, token) => {
   return result;
 };
 
+const postComment = async (token, post_id, commentContent) => {
+  const result = {
+    ok: true,
+    message: "",
+    commentDetail: null, // I desire this to have Username, Commnet Content, Likes/Dislikes Count
+  };
+
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${post_id}/comment`, {
+      method: "POST",
+      credentials: "include",
+      mode: "cors",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: commentContent }),
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+
+      result.ok = false;
+      result.message = errData.message;
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+      result.commentDetail = data.commentDetail;
+    }
+
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return(result);
+};
+
+const getAllComments = async (token, post_id) => {
+  const result = {
+    ok: true,
+    message: "",
+    comments: [],
+  };
+
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${post_id}/comments`, {
+      method: "GET",
+      credentials: "include",
+      mode: "cors",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+
+      result.ok = false;
+      result.message = errData.message;
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+      result.comments = data.comments;
+    }
+
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return result;
+}
+
 export default {
   signin,
   signup,
@@ -188,4 +263,6 @@ export default {
   signout,
   acquireEntirePosts,
   createPost,
+  postComment,
+  getAllComments,
 };
