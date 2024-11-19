@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import useAuth from "../../components/AuthProvider.jsx";
 import api from "../../api/api.js";
+import utils from "../../utils/utils.js";
+import PropTypes from "prop-types";
 
 const PostInteractableButton = ({ defaultColour="#697565", hoveredColour="#e0a01f", type="thumbs-up", activated=false, setActivated=()=>{} }) => {
   const [hovered, setHovered] = useState(false);
@@ -54,6 +56,40 @@ const PostInteractableButton = ({ defaultColour="#697565", hoveredColour="#e0a01
   );
 };
 
+const Comment = ({ username, content, likeCount, dislikeCount, userReaction, handleLikeDislike }) => {
+  return (
+    <div className="bf-comment">
+      <div className="bf-comment-quick-info">
+        <div
+          className="todo-actually-change-to-user-profile"
+          style={
+            {
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              backgroundColor: "var(--main-colour3)"
+            }
+          }
+        >
+        </div>
+        <div>{username}</div>
+      </div>
+      <p>{content}</p>
+      <div className="bf-comment-interaction">
+        <div>
+          <PostInteractableButton type="thumbs-up" hoveredColour={"#6fd465"} activated={userReaction === 'liked'} setActivated={() => handleLikeDislike(true)} />
+          <p>{likeCount}</p>
+        </div>
+
+        <div>
+          <PostInteractableButton type="thumbs-down" hoveredColour={"#d47266"} activated={userReaction === 'disliked'} setActivated={() => handleLikeDislike(false)} />
+          <p>{dislikeCount}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const PostPage = () => {
   const { state } = useLocation();
   const auth = useAuth();
@@ -94,7 +130,6 @@ const PostPage = () => {
       .toggleLikeDislike(auth.token, state.id, comment_id, like ? "like" : "dislike")
       .then(result => {
         if (result.ok) {
-          console.log(result);
           setComments(prevArray => {
             const newArray = [...prevArray];
             const oldReaction = newArray[idx].user_reaction;
@@ -134,11 +169,7 @@ const PostPage = () => {
       <div className="bf-post-details">
         <p>
           {
-            new Date(state.created_at).toLocaleDateString("en-US", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            })
+            utils.dateToString(state.created_at)
           }
         </p>
         <p>By {state.author}</p>
@@ -150,8 +181,7 @@ const PostPage = () => {
       <div className="bf-divider"></div>
       <div className="bf-comment-section">
         <form onSubmit={handleCommentSubmit}>
-          <textarea rows="4" name="bf-comment-content" placeholder="Add comment ...">
-          </textarea>
+          <textarea rows="4" name="bf-comment-content" placeholder="Add comment ..." required></textarea>
           <button>Submit</button>
         </form>
         <div className="bf-comment-header">
@@ -160,43 +190,32 @@ const PostPage = () => {
         </div>
         <div className="bf-comments">
           {
-            comments.map((comment, idx) => {
-              return (
-                <div key={comment.id} className="bf-comment">
-                  <div className="bf-comment-quick-info">
-                    <div
-                      className="todo-actually-change-to-user-profile"
-                      style={
-                        {
-                          width: "32px",
-                          height: "32px",
-                          borderRadius: "50%",
-                          backgroundColor: "var(--main-colour3)"
-                        }
-                      }
-                    >
-                    </div>
-                    <div>{comment.username}</div>
-                  </div>
-                  <p>{comment.content}</p>
-                  <div className="bf-comment-interaction">
-                    <div>
-                      <PostInteractableButton type="thumbs-up" hoveredColour={"#6fd465"} activated={comment.user_reaction === 'liked'} setActivated={() => handleLikeDislike(true, comment.id, idx)} />
-                      <p>{comment.likes}</p>
-                    </div>
-
-                    <div>
-                      <PostInteractableButton type="thumbs-down" hoveredColour={"#d47266"} activated={comment.user_reaction === 'disliked'} setActivated={() => handleLikeDislike(false, comment.id, idx)} />
-                      <p>{comment.dislikes}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
+            comments.map((comment, idx) => (
+                <Comment
+                  key={comment.id}
+                  username={comment.username} 
+                  content={comment.content}
+                  likeCount={comment.likes}
+                  dislikeCount={comment.dislikes}
+                  userReaction={comment.user_reaction}
+                  handleLikeDislike={(like) => handleLikeDislike(like, comment.id, idx)}
+                />
+              )
+            )
           } 
         </div>
       </div>
     </div>
   )
 };
-export default PostPage; 
+
+export default PostPage;
+
+Comment.propTypes = {
+  username: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  likeCount: PropTypes.number.isRequired,
+  dislikeCount: PropTypes.number.isRequired,
+  userReaction: PropTypes.oneOf(["liked", "disliked", "none"]),
+  handleLikeDislike: PropTypes.func.isRequired,
+};

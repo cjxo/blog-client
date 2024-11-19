@@ -1,7 +1,36 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
+import utils from "../../utils/utils.js";
 import api from "../../api/api.js";
+
+const PostDisplayCard = ({ post }) => {
+  return (
+    <div className="bf-post-card">
+      <h3 className="bf-post-title">{post.title}</h3>
+      <p className="bf-post-contents">
+        {post.content.substring(0, Math.min(100, post.content.length))}...
+      </p>
+      <p className="bf-post-date">
+        {utils.dateToString(post.created_at)}
+      </p>
+      <div className="bf-divider"></div>
+      <div className="bf-post-card-interactables">
+        <div className="bf-post-card-author">
+          <p>By {post.author}</p>
+        </div>
+        <Link 
+          className="bf-read-more-btn"
+          to={`post/${post.id}`}
+          state={post}
+        >
+          Read More
+        </Link>
+      </div>
+    </div>
+  );
+};
 
 const DisplayPostsPage = () => {
   const [posts, setPosts] = useState([]);
@@ -20,38 +49,11 @@ const DisplayPostsPage = () => {
 
   return (
     <div className="bf-posts-grid-display">
-      {posts.map((post) => {
-        return (
-          <div className="bf-post-card" key={post.id}>
-            <h3 className="bf-post-title">{post.title}</h3>
-            <p className="bf-post-contents">
-              {post.content.substring(0, Math.min(100, post.content.length))}...
-            </p>
-            <p className="bf-post-date">
-              {new Date(post.created_at).toLocaleDateString("en-US", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              })}
-            </p>
-            <div className="bf-divider"></div>
-            <div className="bf-post-card-interactables">
-              <div className="bf-post-card-author">
-                <p>By {post.author}</p>
-              </div>
-              <Link 
-                className="bf-read-more-btn"
-                to={`post/${post.id}`}
-                state={post}
-              >
-                Read More
-              </Link>
-            </div>
-          </div>
-        );
-      })}
-
-
+      {
+        posts.map((post) => (
+          <PostDisplayCard key={post.id} post={post} />
+        ))
+      }
     </div>
   );
 };
