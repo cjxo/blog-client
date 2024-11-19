@@ -10,7 +10,6 @@ const CreatePostPage = () => {
 
     const title = fd.get("title");
     const content = fd.get("content");
-    console.log(title, content);
     api
       .createPost(title, content, true, auth.token)
       .then(creationResult => {
@@ -37,7 +36,7 @@ const CreatePostPage = () => {
         placeholder="Add content..."
         name="content"
         id="bf-post-body"
-        rows="25"
+        rows="20"
       ></textarea>
       <button className="bf-submit-post bf-main-button-design">Post</button>
     </form>

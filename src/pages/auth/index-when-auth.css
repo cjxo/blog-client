@@ -83,10 +83,22 @@
 #bf-post-title {
   padding: 16px;
   font-size: 20px;
+  background-color: var(--main-colour3);
+
+  border-radius: 8px;
+  border: 2px solid var(--main-colour2);
+  box-shadow: var(--main-colour1) 0px 0px 12px 0px inset;
 }
 
 #bf-post-body {
   padding: 16px;
+  font-size: 18px;
+  resize: none;
+  background-color: var(--main-colour3);
+
+  border-radius: 8px;
+  border: 2px solid var(--main-colour2);
+  box-shadow: var(--main-colour1) 0px 0px 8px 2px inset;
 }
 
 .bf-submit-post {
