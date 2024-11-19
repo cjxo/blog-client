@@ -21,7 +21,7 @@ const PostDisplayCard = ({ post }) => {
           <p>By {post.author}</p>
         </div>
         <Link 
-          className="bf-read-more-btn"
+          className="bf-read-more-btn bf-main-button-design"
           to={`post/${post.id}`}
           state={post}
         >

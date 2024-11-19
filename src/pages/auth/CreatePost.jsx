@@ -39,7 +39,7 @@ const CreatePostPage = () => {
         id="bf-post-body"
         rows="25"
       ></textarea>
-      <button className="bf-submit-post">Post</button>
+      <button className="bf-submit-post bf-main-button-design">Post</button>
     </form>
   );
 };

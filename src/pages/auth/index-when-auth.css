@@ -16,7 +16,7 @@
   display: flex;
 }
 
-.bf-side-bar { 
+.bf-side-bar {
   background-color: var(--main-colour0);
   color: var(--main-text-colour0);
   border-right: 1px solid var(--main-colour2);
@@ -90,9 +90,7 @@
 }
 
 .bf-submit-post {
-  padding: 8px 16px;
-  font-size: 18px;
-
+  font-size: 20px;
   align-self: flex-end;
 }
 
@@ -163,7 +161,7 @@
   margin-top: 4px;
 }
 
-.bf-read-more-btn, .bf-comment-section > form button {
+.bf-main-button-design {
   color: var(--main-colour1);
   background-color: var(--main-colour3);
   border: 1px solid transparent;
@@ -176,7 +174,7 @@
   transition-timing-function: ease;
 }
 
-.bf-read-more-btn:hover, .bf-comment-section > form button:hover {
+.bf-main-button-design:hover {
   color: var(--main-text-colour0);
   border: 1px solid var(--main-colour2); 
   background-color: var(--main-colour0);

@@ -182,7 +182,7 @@ const PostPage = () => {
       <div className="bf-comment-section">
         <form onSubmit={handleCommentSubmit}>
           <textarea rows="4" name="bf-comment-content" placeholder="Add comment ..." required></textarea>
-          <button>Submit</button>
+          <button className="bf-main-button-design">Submit</button>
         </form>
         <div className="bf-comment-header">
           <h3>Comments</h3>
