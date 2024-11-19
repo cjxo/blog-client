@@ -79,6 +79,7 @@ const PostPage = () => {
     const fetchComments = async () => {
       const fetched = await api.getAllComments(auth.token, state.id);
       if (fetched.ok) {
+        console.log(fetched.comments);
         setComments(fetched.comments);
       } else {
           console.error(fetched.message);
@@ -88,8 +89,47 @@ const PostPage = () => {
     fetchComments();
   }, []);
 
+  const handleLikeDislike = (like, comment_id, idx) => {
+    api
+      .toggleLikeDislike(auth.token, state.id, comment_id, like ? "like" : "dislike")
+      .then(result => {
+        if (result.ok) {
+          console.log(result);
+          setComments(prevArray => {
+            const newArray = [...prevArray];
+            const oldReaction = newArray[idx].user_reaction;
+            newArray[idx].user_reaction = result.newValue;
+
+            switch (oldReaction) {
+              case "liked": {
+                newArray[idx].likes -= 1;
+              } break;
+
+              case "disliked": {
+                newArray[idx].dislikes -= 1;
+              } break;
+            }
+
+            switch (newArray[idx].user_reaction) {
+              case "liked": {
+                newArray[idx].likes += 1;
+              } break;
+
+              case "disliked": {
+                newArray[idx].dislikes += 1;
+              } break;
+            }
+
+            return newArray;
+          });
+        } else {
+          console.error(result.message);
+        }
+      });
+  };
+
   return (
-    <div className="bf-post-expanded-root">
+    <div className="bf-post-expanded-root"> 
       <h1>{state.title}</h1>
       <div className="bf-post-details">
         <p>
@@ -120,7 +160,7 @@ const PostPage = () => {
         </div>
         <div className="bf-comments">
           {
-            comments.map(comment => {
+            comments.map((comment, idx) => {
               return (
                 <div key={comment.id} className="bf-comment">
                   <div className="bf-comment-quick-info">
@@ -141,12 +181,12 @@ const PostPage = () => {
                   <p>{comment.content}</p>
                   <div className="bf-comment-interaction">
                     <div>
-                      <PostInteractableButton type="thumbs-up" hoveredColour={"#6fd465"} />
+                      <PostInteractableButton type="thumbs-up" hoveredColour={"#6fd465"} activated={comment.user_reaction === 'liked'} setActivated={() => handleLikeDislike(true, comment.id, idx)} />
                       <p>{comment.likes}</p>
                     </div>
 
                     <div>
-                      <PostInteractableButton type="thumbs-down" hoveredColour={"#d47266"} />
+                      <PostInteractableButton type="thumbs-down" hoveredColour={"#d47266"} activated={comment.user_reaction === 'disliked'} setActivated={() => handleLikeDislike(false, comment.id, idx)} />
                       <p>{comment.dislikes}</p>
                     </div>
                   </div>

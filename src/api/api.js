@@ -256,6 +256,43 @@ const getAllComments = async (token, post_id) => {
   return result;
 }
 
+const toggleLikeDislike = async (token, post_id, comment_id, type) => {
+  const result = {
+    ok: true,
+    message: "",
+    newValue: "",
+  };
+
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${post_id}/comment/${comment_id}/like`, {
+      method: "POST",
+      credentials: "include",
+      mode: "cors",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ type })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      result.ok = false;
+      result.message = errData.message;
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+      result.newValue = data.newValue;
+    }
+
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return result;
+};
+
 export default {
   signin,
   signup,
@@ -265,4 +302,5 @@ export default {
   createPost,
   postComment,
   getAllComments,
+  toggleLikeDislike,
 };
