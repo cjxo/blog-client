@@ -283,3 +283,27 @@
   width: 26px;
   height: 26px;
 }
+
+.bf-post-bottom {
+  display: flex;
+  margin-top: 32px;
+}
+
+.bf-post-bottom-entry {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.bf-post-bottom-entry > button {
+  background-color: transparent;
+  border: 1px solid transparent;
+  margin-bottom: auto;
+  display: flex;
+  align-items: center;
+}
+
+.bf-post-bottom-entry > p {
+  display: flex;
+  align-items: center;
+}

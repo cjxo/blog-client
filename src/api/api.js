@@ -293,6 +293,85 @@ const toggleLikeDislike = async (token, post_id, comment_id, type) => {
   return result;
 };
 
+const toggleHeart = async (token, post_id) => {
+  const result = {
+    ok: true,
+    message: "",
+    newValue: "",
+  };
+
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${post_id}/heart`, {
+      method: "POST",
+      credentials: "include",
+      mode: "cors",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      result.ok = false;
+      result.message = errData.message;
+      result.newValue = "none";
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+      result.newValue = data.newValue;
+    }
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+    result.newValue = "none";
+  }
+
+  return result;
+};
+
+// OH LOOK! We got alot of similar API's that sets/gets __SOMETHING__
+// about the post! For instance, toggleHearts/toggleLikeDislike, or
+// getHeartCount/likeDislikeCount!
+// for now, we let the repetition unfold to see later how we condense this!
+// Find Patterns!
+const getUserHasHeartPost = async (token, post_id) => {
+  const result = {
+    ok: true,
+    message: "",
+    hearted: false,
+    heartCount: 0,
+  };
+
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${post_id}/heart`, {
+      method: "GET",
+      credentials: "include",
+      mode: "cors",
+      headers: {
+        "authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      result.ok = false;
+      result.message = errData.message;
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+      console.log(data.result);
+      result.hearted = data.result.hearted;
+      result.heartCount = data.result.heartCount;
+    }
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return result;
+}
+
 export default {
   signin,
   signup,
@@ -303,4 +382,6 @@ export default {
   postComment,
   getAllComments,
   toggleLikeDislike,
+  toggleHeart,
+  getUserHasHeartPost,
 };

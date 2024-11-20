@@ -43,6 +43,24 @@ const PostInteractableButton = ({ defaultColour="#697565", hoveredColour="#e0a01
         );
       }
     } break;
+
+    case "heart": {
+      if (hovered || activated) {
+        renderables = (
+          <svg width="800px" height="800px" className="bf-post-interactables" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+           <g transform="translate(0 -1028.4)">
+            <path d="m7 1031.4c-1.5355 0-3.0784 0.5-4.25 1.7-2.3431 2.4-2.2788 6.1 0 8.5l9.25 9.8 9.25-9.8c2.279-2.4 2.343-6.1 0-8.5-2.343-2.3-6.157-2.3-8.5 0l-0.75 0.8-0.75-0.8c-1.172-1.2-2.7145-1.7-4.25-1.7z" fill="#e74c3c"/>
+           </g>
+          </svg>
+        );
+      } else {
+        renderables = (
+          <svg width="800px" className="bf-post-interactables" height="800px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.88 4.78a3.489 3.489 0 0 0-.37-.9 3.24 3.24 0 0 0-.6-.79 3.78 3.78 0 0 0-1.21-.81 3.74 3.74 0 0 0-2.84 0 4 4 0 0 0-1.16.75l-.05.06-.65.65-.65-.65-.05-.06a4 4 0 0 0-1.16-.75 3.74 3.74 0 0 0-2.84 0 3.78 3.78 0 0 0-1.21.81 3.55 3.55 0 0 0-.97 1.69 3.75 3.75 0 0 0-.12 1c0 .317.04.633.12.94a4 4 0 0 0 .36.89 3.8 3.8 0 0 0 .61.79L8 14.31l5.91-5.91c.237-.233.44-.5.6-.79A3.578 3.578 0 0 0 15 5.78a3.747 3.747 0 0 0-.12-1zm-1 1.63a2.69 2.69 0 0 1-.69 1.21l-5.21 5.2-5.21-5.2a2.9 2.9 0 0 1-.44-.57 3 3 0 0 1-.27-.65 3.25 3.25 0 0 1-.08-.69A3.36 3.36 0 0 1 2.06 5a2.8 2.8 0 0 1 .27-.65c.12-.21.268-.4.44-.57a2.91 2.91 0 0 1 .89-.6 2.8 2.8 0 0 1 2.08 0c.33.137.628.338.88.59l1.36 1.37 1.36-1.37a2.72 2.72 0 0 1 .88-.59 2.8 2.8 0 0 1 2.08 0c.331.143.633.347.89.6.174.165.32.357.43.57a2.69 2.69 0 0 1 .35 1.34 2.6 2.6 0 0 1-.06.72h-.03z" fill={defaultColour}/>
+          </svg>
+        );
+      }
+    } break;
   }
 
   return (
@@ -90,17 +108,78 @@ const Comment = ({ username, content, likeCount, dislikeCount, userReaction, han
   );
 };
 
+const CommentSection = ({ comments, handleLikeDislike, handleCommentSubmit }) => {
+  return (
+    <div className="bf-comment-section">
+      <form onSubmit={handleCommentSubmit}>
+        <textarea rows="4" name="bf-comment-content" placeholder="Add comment ..." required></textarea>
+        <button className="bf-main-button-design">Submit</button>
+      </form>
+      <div className="bf-comment-header">
+        <h3>Comments</h3>
+        <div>{comments.length}</div>
+      </div>
+      <div className="bf-comments">
+        {
+          comments.map((comment, idx) => (
+              <Comment
+                key={comment.id}
+                username={comment.username} 
+                content={comment.content}
+                likeCount={comment.likes}
+                dislikeCount={comment.dislikes}
+                userReaction={comment.user_reaction}
+                handleLikeDislike={(like) => handleLikeDislike(like, comment.id, idx)}
+              />
+            )
+          )
+        } 
+      </div>
+    </div>
+  );
+};
+
+const PostSection = ({ post, userHearted=false, handleHeart, heartCount }) => {
+  return (
+    <>
+      <h1>{post.title}</h1>
+      <div className="bf-post-details">
+        <p>
+          {
+            utils.dateToString(post.created_at)
+          }
+        </p>
+        <p>By {post.author}</p>
+      </div>
+      <p className="bf-post-expanded-content">
+        {post.content}
+      </p>
+      
+      <section className="bf-post-bottom">
+        <div className="bf-post-bottom-entry">
+          <PostInteractableButton type="heart" activated={userHearted} setActivated={handleHeart}/>
+          <p>{heartCount}</p>
+        </div>
+      </section>
+    </>
+  );
+};
+
 const PostPage = () => {
   const { state } = useLocation();
   const auth = useAuth();
   const [comments, setComments] = useState([]);
+  const [userHearted, setUserHearted] = useState(false);
+  const [heartCount, setHeartCount] = useState(0);
+
+  const post = state.post;
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
 
     api
-      .postComment(auth.token, state.id, fd.get("bf-comment-content"))
+      .postComment(auth.token, post.id, fd.get("bf-comment-content"))
       .then(result => {
         if (result.ok) {
           e.target.reset();
@@ -113,21 +192,33 @@ const PostPage = () => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const fetched = await api.getAllComments(auth.token, state.id);
+      const fetched = await api.getAllComments(auth.token, post.id);
       if (fetched.ok) {
         console.log(fetched.comments);
         setComments(fetched.comments);
       } else {
-          console.error(fetched.message);
+        console.error(fetched.message);
+      }
+    };
+
+    const fetchUserHasHeartPost = async () => {
+      const fetched = await api.getUserHasHeartPost(auth.token, post.id);
+      if (fetched.ok) {
+        console.log(fetched.message);
+        setUserHearted(fetched.hearted);
+        setHeartCount(fetched.heartCount);
+      } else {
+        console.error(fetched.message);
       }
     };
 
     fetchComments();
+    fetchUserHasHeartPost();
   }, []);
 
   const handleLikeDislike = (like, comment_id, idx) => {
     api
-      .toggleLikeDislike(auth.token, state.id, comment_id, like ? "like" : "dislike")
+      .toggleLikeDislike(auth.token, post.id, comment_id, like ? "like" : "dislike")
       .then(result => {
         if (result.ok) {
           setComments(prevArray => {
@@ -161,50 +252,37 @@ const PostPage = () => {
           console.error(result.message);
         }
       });
+  }; 
+
+  const handleHeart = () => {
+    api
+      .toggleHeart(auth.token, post.id)
+      .then(result => {
+        if (result.ok) {
+          setUserHearted(result.newValue === "heart");
+          setHeartCount(stateHeartCount => {
+            if (result.newValue === "heart") {
+              return stateHeartCount + 1;
+            } else {
+              return stateHeartCount - 1;
+            }
+          });
+
+        } else {
+          console.error(result.message);
+        }
+      })
   };
 
   return (
     <div className="bf-post-expanded-root"> 
-      <h1>{state.title}</h1>
-      <div className="bf-post-details">
-        <p>
-          {
-            utils.dateToString(state.created_at)
-          }
-        </p>
-        <p>By {state.author}</p>
-      </div>
-      <p className="bf-post-expanded-content">
-        {state.content}
-      </p>
-
+      <PostSection post={post} handleHeart={handleHeart} userHearted={userHearted} heartCount={heartCount} />
       <div className="bf-divider"></div>
-      <div className="bf-comment-section">
-        <form onSubmit={handleCommentSubmit}>
-          <textarea rows="4" name="bf-comment-content" placeholder="Add comment ..." required></textarea>
-          <button className="bf-main-button-design">Submit</button>
-        </form>
-        <div className="bf-comment-header">
-          <h3>Comments</h3>
-          <div>{comments.length}</div>
-        </div>
-        <div className="bf-comments">
-          {
-            comments.map((comment, idx) => (
-                <Comment
-                  key={comment.id}
-                  username={comment.username} 
-                  content={comment.content}
-                  likeCount={comment.likes}
-                  dislikeCount={comment.dislikes}
-                  userReaction={comment.user_reaction}
-                  handleLikeDislike={(like) => handleLikeDislike(like, comment.id, idx)}
-                />
-              )
-            )
-          } 
-        </div>
-      </div>
+      <CommentSection
+        comments={comments}
+        handleLikeDislike={handleLikeDislike}
+        handleCommentSubmit={handleCommentSubmit}
+      />
     </div>
   )
 };
@@ -218,4 +296,10 @@ Comment.propTypes = {
   dislikeCount: PropTypes.number.isRequired,
   userReaction: PropTypes.oneOf(["liked", "disliked", "none"]),
   handleLikeDislike: PropTypes.func.isRequired,
+};
+
+CommentSection.propTypes = {
+  comments: PropTypes.array.isRequired,
+  handleLikeDislike: PropTypes.func.isRequired,
+  handleCommentSubmit: PropTypes.func.isRequired,
 };

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import utils from "../../utils/utils.js";
 import api from "../../api/api.js";
 
-const PostDisplayCard = ({ post }) => {
+const PostDisplayCard = ({ post }) => { 
   return (
     <div className="bf-post-card">
       <h3 className="bf-post-title">{post.title}</h3>
@@ -23,7 +23,7 @@ const PostDisplayCard = ({ post }) => {
         <Link 
           className="bf-read-more-btn bf-main-button-design"
           to={`post/${post.id}`}
-          state={post}
+          state={{post}}
         >
           Read More
         </Link>
