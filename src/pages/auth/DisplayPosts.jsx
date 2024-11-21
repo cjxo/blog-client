@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import utils from "../../utils/utils.js";
+import useAuth from "../../components/AuthProvider.jsx";
 import api from "../../api/api.js";
+import utils from "../../utils/utils.js";
 
 const PostDisplayCard = ({ post }) => { 
   return (
     <div className="bf-post-card">
       <h3 className="bf-post-title">{post.title}</h3>
       <p className="bf-post-contents">
-        {post.content.substring(0, Math.min(100, post.content.length))}...
+        {post.content.substring(0, Math.min(140, post.content.length))}...
       </p>
       <p className="bf-post-date">
         {utils.dateToString(post.created_at)}
@@ -22,7 +23,7 @@ const PostDisplayCard = ({ post }) => {
         </div>
         <Link 
           className="bf-read-more-btn bf-main-button-design"
-          to={`post/${post.id}`}
+          to={`/home/post/${post.id}`}
           state={{post}}
         >
           Read More
@@ -32,11 +33,17 @@ const PostDisplayCard = ({ post }) => {
   );
 };
 
-const DisplayPostsPage = () => {
+const DisplayPostsPage = ({ userId }) => {
+  const auth = useAuth();
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const acquirePosts = async () => {
-      const acquiredPosts = await api.acquireEntirePosts();
+      let acquiredPosts;
+      if (userId) {
+        acquiredPosts = await api.acquirePostFromUserId(auth.user.id);
+      } else {
+        acquiredPosts = await api.acquireEntirePosts();
+      }
       if (acquiredPosts.ok) {
         setPosts(acquiredPosts.posts);
       } else {

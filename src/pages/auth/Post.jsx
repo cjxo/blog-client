@@ -78,17 +78,7 @@ const Comment = ({ username, content, likeCount, dislikeCount, userReaction, han
   return (
     <div className="bf-comment">
       <div className="bf-comment-quick-info">
-        <div
-          className="todo-actually-change-to-user-profile"
-          style={
-            {
-              width: "32px",
-              height: "32px",
-              borderRadius: "50%",
-              backgroundColor: "var(--main-colour3)"
-            }
-          }
-        >
+        <div className="todo-actually-change-to-user-profile">
         </div>
         <div>{username}</div>
       </div>

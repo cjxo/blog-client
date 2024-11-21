@@ -33,28 +33,38 @@ const LinkIcon = ({ mdil, link, selected=false, setSelected=()=>{} }) => {
 };
 
 const HomePage = () => {
-  const auth = useAuth();
-  if (auth.loading) {
-    return <div>Loading...</div>
-  }
-
-  if (!auth.token) {
-      return <Navigate to="/sign-in" />;
-  }
+  const auth = useAuth(); 
 
   const [maxContainerHeight, setMaxContainerHeight] = useState(0);
+  const [selectedSidebar, setSelectedSidebar] = useState(0); 
 
+  // damn, I hate this. 
   useEffect(() => {
     const updateMaxHeight = () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerHeight
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetHeight
-      const headerHeight = document.querySelector(".bf-header").offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const maxHeight = viewportHeight - headerHeight;
-      setMaxContainerHeight(maxHeight);
+      const headerElement = document.querySelector(".bf-header");
+      if (headerElement) {
+        const headerHeight = headerElement.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        const maxHeight = viewportHeight - headerHeight;
+        setMaxContainerHeight(maxHeight);
+        return true;
+      }
+
+      return false;
     };
 
-    updateMaxHeight();
+    const observer = new MutationObserver(() => {
+      if (updateMaxHeight()) {
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
 
     window.addEventListener('resize', updateMaxHeight);
 
@@ -63,7 +73,15 @@ const HomePage = () => {
     };
   }, []);
 
-  const [selectedSidebar, setSelectedSidebar] = useState(0);
+
+  if (auth.loading) {
+    return <div>Loading...</div>
+  }
+
+  if (!auth.token) {
+      return <Navigate to="/sign-in" />;
+  }
+
   const sidebarNames = [
     "Home", "Inbox", "Notifications", "Add Post", "Profile"
   ];

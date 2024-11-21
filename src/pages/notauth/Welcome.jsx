@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './welcome.css';
 import { NavTop } from "../../components/HomepageNav.jsx";
 import Footer from "../../components/HomepageFooter.jsx";
-import { Outlet, useLocation, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, Navigate } from "react-router-dom";
 import useAuth from "../../components/AuthProvider.jsx";
 
 window.addEventListener("storage", (e) => {
@@ -13,6 +13,7 @@ window.addEventListener("storage", (e) => {
 
 const WelcomePage = () => {
   const auth = useAuth();
+  const location = useLocation();
 
   if (auth.loading) {
     return <div>Loading...</div>;  // Or any loading spinner... 

@@ -67,7 +67,7 @@ const signup = async (firstName, lastName, username, email, password) => {
 };
 
 const getAccessToken = async () => {
-  const result = { ok: true, message: "Success", accessToken: null };
+  const result = { ok: true, message: "Success", accessToken: null, userId: 0, username: "" };
   try {
     const response = await fetch ("http://localhost:3000/auth/token", {
       mode: "cors",
@@ -82,6 +82,8 @@ const getAccessToken = async () => {
     } else {
       const data = await response.json();
       result.accessToken = data.accessToken;
+      result.userId = data.userId;
+      result.username = data.username;
     }
   } catch (err) {
     result.ok = false;
@@ -144,6 +146,35 @@ const acquireEntirePosts = async () => {
     result.message = err;
   }
 
+  return result;
+};
+
+const acquirePostFromUserId = async (id) => {
+  const result = {
+    ok: true,
+    message: "",
+    posts: []
+  };
+
+  try {
+    const response = await fetch(`http://localhost:3000/user/${id}/posts`, {
+      mode: "cors",
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      result.ok = false;
+      result.message = errData.message;
+    } else {
+      const data = await response.json();
+      result.message = data.message;
+      result.posts = data.posts;
+    }
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
   return result;
 };
 
@@ -382,6 +413,7 @@ export default {
   getAccessToken,
   signout,
   acquireEntirePosts,
+  acquirePostFromUserId,
   createPost,
   postComment,
   getAllComments,
