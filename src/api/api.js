@@ -335,16 +335,20 @@ const toggleHeart = async (token, post_id) => {
 // getHeartCount/likeDislikeCount!
 // for now, we let the repetition unfold to see later how we condense this!
 // Find Patterns!
-const getUserHasHeartPost = async (token, post_id) => {
+const getPostStatistics = async (token, post_id) => {
   const result = {
     ok: true,
     message: "",
-    hearted: false,
+    heartedByUser: false,
     heartCount: 0,
+    viewCount: 0,
+    // commentCount: 0,
+    // userCommentLikes: [],
+    // userCommentDislikes: [],
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/posts/${post_id}/heart`, {
+    const response = await fetch(`http://localhost:3000/posts/${post_id}/statistics`, {
       method: "GET",
       credentials: "include",
       mode: "cors",
@@ -360,9 +364,9 @@ const getUserHasHeartPost = async (token, post_id) => {
     } else {
       const data = await response.json();
       result.message = data.message;
-      console.log(data.result);
-      result.hearted = data.result.hearted;
-      result.heartCount = data.result.heartCount;
+      result.heartedByUser = data.heartedByUser;
+      result.heartCount = data.heartCount;
+      result.viewCount = data.viewCount;
     }
   } catch (err) {
     result.ok = false;
@@ -370,7 +374,7 @@ const getUserHasHeartPost = async (token, post_id) => {
   }
 
   return result;
-}
+};
 
 export default {
   signin,
@@ -383,5 +387,5 @@ export default {
   getAllComments,
   toggleLikeDislike,
   toggleHeart,
-  getUserHasHeartPost,
+  getPostStatistics,
 };

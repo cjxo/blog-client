@@ -4,6 +4,7 @@ import {
   useState,
   useEffect,
 } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import api from "../api/api.js";
 
@@ -11,10 +12,12 @@ const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchAccessToken = async () => {
     const result = await api.getAccessToken();
     setToken(result.accessToken);
+    setLoading(false);
     return result.ok;
   };
 
@@ -43,7 +46,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{token, signin, signup, signout, fetchAccessToken}}>
+    <AuthContext.Provider value={{token, loading, signin, signup, signout, fetchAccessToken}}>
       {children}
     </AuthContext.Provider>
   );

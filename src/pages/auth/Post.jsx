@@ -171,6 +171,7 @@ const PostPage = () => {
   const [comments, setComments] = useState([]);
   const [userHearted, setUserHearted] = useState(false);
   const [heartCount, setHeartCount] = useState(0);
+  const [viewCount, setViewCount] = useState(0);
 
   const post = state.post;
 
@@ -201,19 +202,21 @@ const PostPage = () => {
       }
     };
 
-    const fetchUserHasHeartPost = async () => {
-      const fetched = await api.getUserHasHeartPost(auth.token, post.id);
+    const fetchPostStatistics = async () => {
+      const fetched = await api.getPostStatistics(auth.token, post.id);
       if (fetched.ok) {
         console.log(fetched.message);
-        setUserHearted(fetched.hearted);
+        setUserHearted(fetched.heartedByUser);
         setHeartCount(fetched.heartCount);
+        setViewCount(fetched.viewCount);
+        console.log(fetched.viewCount);
       } else {
         console.error(fetched.message);
       }
     };
 
     fetchComments();
-    fetchUserHasHeartPost();
+    fetchPostStatistics();
   }, []);
 
   const handleLikeDislike = (like, comment_id, idx) => {

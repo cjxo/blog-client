@@ -34,6 +34,10 @@ const LinkIcon = ({ mdil, link, selected=false, setSelected=()=>{} }) => {
 
 const HomePage = () => {
   const auth = useAuth();
+  if (auth.loading) {
+    return <div>Loading...</div>
+  }
+
   if (!auth.token) {
       return <Navigate to="/sign-in" />;
   }
