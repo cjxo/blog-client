@@ -132,7 +132,7 @@ const HomePage = () => {
             }
           </ul>
 
-          <LinkIcon mdil={mdilAccount} link="account" selected={selectedSidebar === 4} setSelected={ () => setSelectedSidebar(4) }/>
+          <LinkIcon mdil={mdilAccount} link="account" selected={selectedSidebar === 3} setSelected={ () => setSelectedSidebar(3) }/>
         </section> 
         <section className="bf-content-display-area">
           <header className="bf-header">

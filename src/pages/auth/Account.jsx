@@ -29,10 +29,13 @@ const AccountPage = () => {
           .then(result => {
             if (result.ok) {
               setEditMode(false);
+              setErrorMsg("");
             } else {
               setErrorMsg(result.message);
             }
           });
+      } else {
+        setEditMode(false);
       }
     } else {
       setEditMode(true);
