@@ -33,14 +33,17 @@ const PostDisplayCard = ({ post }) => {
   );
 };
 
-const DisplayPostsPage = ({ userId }) => {
+// filterBy:
+//  - all-posts
+//  - hearts
+const DisplayPostsPage = ({ userId=null, filterBy="all-posts" }) => {
   const auth = useAuth();
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const acquirePosts = async () => {
       let acquiredPosts;
       if (userId) {
-        acquiredPosts = await api.acquirePostFromUserId(auth.user.id);
+        acquiredPosts = await api.acquirePostFromUserId(auth.user.id, filterBy);
       } else {
         acquiredPosts = await api.acquireEntirePosts();
       }
@@ -52,7 +55,7 @@ const DisplayPostsPage = ({ userId }) => {
     };
 
     acquirePosts();
-  }, []);
+  }, [filterBy, auth.user.name]);
 
   return (
     <div className="bf-posts-grid-display">

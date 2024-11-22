@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     fetchAccessToken();
-  }, []);
+  }, [token]);
 
   const signin = async (username, password) => {
     const result = await api.signin(username, password);
@@ -46,8 +46,17 @@ const AuthProvider = ({ children }) => {
     return result;
   };
 
+  const editUserDetail = async (newUname) => {
+    const result = await api.editUserDetail(token, newUname);
+    if (result.ok) {
+      setUser({ ...user, name: newUname });
+      console.log("HEY!")
+    }
+    return result;
+  };
+
   return (
-    <AuthContext.Provider value={{token, user, loading, signin, signup, signout, fetchAccessToken}}>
+    <AuthContext.Provider value={{token, user, editUserDetail, loading, signin, signup, signout, fetchAccessToken}}>
       {children}
     </AuthContext.Provider>
   );

@@ -83,17 +83,16 @@ const HomePage = () => {
   }
 
   const sidebarNames = [
-    "Home", "Inbox", "Notifications", "Add Post", "Profile"
+    "Home",
+    "Notifications",
+    "Add Post",
+    "Profile"
   ];
 
   const sidebarLinks = [
     {
       name: "/home",
       icon: mdilHome, 
-    },
-    {
-      name: "inbox",
-      icon: mdilInbox,
     },
     {
       name: "notifications",

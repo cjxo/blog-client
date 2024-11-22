@@ -149,7 +149,7 @@ const acquireEntirePosts = async () => {
   return result;
 };
 
-const acquirePostFromUserId = async (id) => {
+const acquirePostFromUserId = async (id, filterBy) => {
   const result = {
     ok: true,
     message: "",
@@ -157,7 +157,7 @@ const acquirePostFromUserId = async (id) => {
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/user/${id}/posts`, {
+    const response = await fetch(`http://localhost:3000/user/${id}/posts?filterBy=${filterBy}`, {
       mode: "cors",
       method: "GET",
     });
@@ -407,6 +407,38 @@ const getPostStatistics = async (token, post_id) => {
   return result;
 };
 
+const editUserDetail = async (token, newUname) => {
+  const result = {
+    ok: true,
+    message: "",
+  };
+
+  try {
+    const response = await fetch("http://localhost:3000/auth/edit", {
+      mode: "cors",
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newUsername: newUname,
+      })
+    });
+    const data = await response.json();
+    result.message = data.message;
+    if (!response.ok) {
+      result.ok = false;
+    }
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return result;
+};
+
 export default {
   signin,
   signup,
@@ -420,4 +452,5 @@ export default {
   toggleLikeDislike,
   toggleHeart,
   getPostStatistics,
+  editUserDetail,
 };

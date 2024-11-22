@@ -11,6 +11,7 @@ import AccountPage from "./pages/auth/Account.jsx"
 import DisplayPostsPage from "./pages/auth/DisplayPosts.jsx"
 import CreatePostPage from "./pages/auth/CreatePost.jsx"
 import PostPage from "./pages/auth/Post.jsx"
+import NotificationPage from "./pages/auth/Notification.jsx";
 import { AuthProvider } from "./components/AuthProvider.jsx"
 
 import {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "post/:id",
         element: <PostPage />,
+      },
+      {
+        path: "notifications",
+        element: <NotificationPage />
       },
     ]
   }
