@@ -324,38 +324,39 @@ const toggleLikeDislike = async (token, post_id, comment_id, type) => {
   return result;
 };
 
-const toggleHeart = async (token, post_id) => {
+// statisticsToSet can take
+// heart: true, false,
+// comment_id: for comment
+// like: "like"/"dislike" to toggle.
+// view: true
+const setPostStatistics = async (token, post_id, statisticsToSet) => {
   const result = {
     ok: true,
     message: "",
-    newValue: "",
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/posts/${post_id}/heart`, {
-      method: "POST",
-      credentials: "include",
+    const response = await fetch (`http://localhost:3000/posts/${post_id}/statistics`, {
       mode: "cors",
+      credentials: "include",
+      method: "PUT",
       headers: {
         "authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(statisticsToSet),
     });
 
+    const data = await response.json();
+    result.message = data.message;
     if (!response.ok) {
-      const errData = await response.json();
       result.ok = false;
-      result.message = errData.message;
-      result.newValue = "none";
     } else {
-      const data = await response.json();
-      result.message = data.message;
-      result.newValue = data.newValue;
+      result.setData = data.setData;
     }
   } catch (err) {
     result.ok = false;
     result.message = err;
-    result.newValue = "none";
   }
 
   return result;
@@ -450,7 +451,7 @@ export default {
   postComment,
   getAllComments,
   toggleLikeDislike,
-  toggleHeart,
+  setPostStatistics,
   getPostStatistics,
   editUserDetail,
 };

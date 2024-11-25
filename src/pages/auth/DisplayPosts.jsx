@@ -6,7 +6,14 @@ import useAuth from "../../components/AuthProvider.jsx";
 import api from "../../api/api.js";
 import utils from "../../utils/utils.js";
 
-const PostDisplayCard = ({ post }) => { 
+const PostDisplayCard = ({ post, auth }) => { 
+  const handleIncrementViewCount = () => {
+    api
+      .setPostStatistics(auth.token, post.id, { view: true })
+      .then(result => {
+        console.log(result);
+      });
+  };
   return (
     <div className="bf-post-card">
       <h3 className="bf-post-title">{post.title}</h3>
@@ -25,6 +32,7 @@ const PostDisplayCard = ({ post }) => {
           className="bf-read-more-btn bf-main-button-design"
           to={`/home/post/${post.id}`}
           state={{post}}
+          onClick={handleIncrementViewCount}
         >
           Read More
         </Link>
@@ -61,7 +69,7 @@ const DisplayPostsPage = ({ userId=null, filterBy="all-posts" }) => {
     <div className="bf-posts-grid-display">
       {
         posts.map((post) => (
-          <PostDisplayCard key={post.id} post={post} />
+          <PostDisplayCard key={post.id} post={post} auth={auth} />
         ))
       }
     </div>

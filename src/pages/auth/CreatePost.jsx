@@ -5,6 +5,7 @@ import useAuth from "../../components/AuthProvider.jsx";
 const CreatePostPage = () => {
   const auth = useAuth();
 
+
   const onSubmit = (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);

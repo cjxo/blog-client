@@ -4,6 +4,8 @@ import useAuth from "../../components/AuthProvider.jsx";
 import api from "../../api/api.js";
 import utils from "../../utils/utils.js";
 import PropTypes from "prop-types";
+import Icon from '@mdi/react';
+import { mdilEye } from '@mdi/light-js';
 
 const PostInteractableButton = ({ defaultColour="#697565", hoveredColour="#e0a01f", type="thumbs-up", activated=false, setActivated=()=>{} }) => {
   const [hovered, setHovered] = useState(false);
@@ -129,7 +131,7 @@ const CommentSection = ({ comments, handleLikeDislike, handleCommentSubmit }) =>
   );
 };
 
-const PostSection = ({ post, userHearted=false, handleHeart, heartCount }) => {
+const PostSection = ({ post, userHearted=false, handleHeart, heartCount, viewCount }) => {
   return (
     <>
       <h1>{post.title}</h1>
@@ -140,6 +142,12 @@ const PostSection = ({ post, userHearted=false, handleHeart, heartCount }) => {
           }
         </p>
         <p>By {post.author}</p>
+        <div>
+          <Icon path={mdilEye} size={1} />
+          <p>
+            {viewCount}
+          </p>
+        </div> 
       </div>
       <p className="bf-post-expanded-content">
         {post.content}
@@ -211,13 +219,13 @@ const PostPage = () => {
 
   const handleLikeDislike = (like, comment_id, idx) => {
     api
-      .toggleLikeDislike(auth.token, post.id, comment_id, like ? "like" : "dislike")
+      .setPostStatistics(auth.token, post.id, { comment_id, like: like ? "like" : "dislike" })
       .then(result => {
         if (result.ok) {
           setComments(prevArray => {
             const newArray = [...prevArray];
             const oldReaction = newArray[idx].user_reaction;
-            newArray[idx].user_reaction = result.newValue;
+            newArray[idx].user_reaction = result.setData.like;
 
             switch (oldReaction) {
               case "liked": {
@@ -248,28 +256,28 @@ const PostPage = () => {
   }; 
 
   const handleHeart = () => {
+    const newHearted = !userHearted;
     api
-      .toggleHeart(auth.token, post.id)
+      .setPostStatistics(auth.token, post.id, { heart: newHearted })
       .then(result => {
         if (result.ok) {
-          setUserHearted(result.newValue === "heart");
+          setUserHearted(newHearted);
           setHeartCount(stateHeartCount => {
-            if (result.newValue === "heart") {
+            if (newHearted) {
               return stateHeartCount + 1;
             } else {
               return stateHeartCount - 1;
             }
           });
-
         } else {
           console.error(result.message);
         }
-      })
+      });
   };
 
   return (
     <div className="bf-post-expanded-root"> 
-      <PostSection post={post} handleHeart={handleHeart} userHearted={userHearted} heartCount={heartCount} />
+      <PostSection post={post} handleHeart={handleHeart} userHearted={userHearted} heartCount={heartCount} viewCount={viewCount} />
       <div className="bf-divider"></div>
       <CommentSection
         comments={comments}
