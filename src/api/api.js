@@ -440,6 +440,35 @@ const editUserDetail = async (token, newUname) => {
   return result;
 };
 
+const deletePost = async (token, post_id) => {
+  const result = {
+    ok: true,
+    message: "",
+  };
+  
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${post_id}`, {
+      method: "DELETE",
+      credentials: "include",
+      mode: "cors",
+      headers: {
+        "authorization": `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+    result.message = data.message;
+    if (!response.ok) {
+      result.ok = false;
+    }
+  } catch (err) {
+    result.ok = false;
+    result.message = err;
+  }
+
+  return result;
+};
+
 export default {
   signin,
   signup,
@@ -454,4 +483,5 @@ export default {
   setPostStatistics,
   getPostStatistics,
   editUserDetail,
+  deletePost,
 };

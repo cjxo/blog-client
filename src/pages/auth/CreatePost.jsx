@@ -1,11 +1,10 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../../api/api.js";
 import useAuth from "../../components/AuthProvider.jsx";
 
 const CreatePostPage = () => {
   const auth = useAuth();
-
-
+  const navigate = useNavigate();
   const onSubmit = (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
@@ -17,6 +16,8 @@ const CreatePostPage = () => {
       .then(creationResult => {
         if (!creationResult.ok) {
           console.error(creationResult.message);
+        } else {
+          navigate("/home");
         }
       })
   };

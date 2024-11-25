@@ -103,7 +103,7 @@ const AccountPage = () => {
       <div>
         {
           (selectedStuff === 0) ? (
-            <DisplayPostsPage userId={auth.user.id} />
+            <DisplayPostsPage userId={auth.user.id} allowDelete={true} />
           ) : (selectedStuff === 1) ? (
             <DisplayPostsPage userId={auth.user.id} filterBy="hearts" />
           ) : (
