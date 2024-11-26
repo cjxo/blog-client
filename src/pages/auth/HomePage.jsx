@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, Navigate, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import useAuth from "../../components/AuthProvider.jsx";
 import Icon from '@mdi/react';
 import {
@@ -33,10 +33,11 @@ const LinkIcon = ({ mdil, link, selected=false, setSelected=()=>{} }) => {
 };
 
 const HomePage = () => {
-  const auth = useAuth(); 
+  const auth = useAuth();
+  const location = useLocation();
+  console.log("ff: ", location.pathname.substring(6))
 
   const [maxContainerHeight, setMaxContainerHeight] = useState(0);
-  const [selectedSidebar, setSelectedSidebar] = useState(0); 
 
   // damn, I hate this. 
   useEffect(() => {
@@ -104,6 +105,21 @@ const HomePage = () => {
     }
   ];
 
+  let selected = 0;
+  switch (location.pathname.substring(6)) {
+    case "notifications": {
+      selected = 1;
+    } break;
+
+    case "add-post": {
+      selected = 2;
+    } break;
+
+    case "account": {
+      selected = 3;
+    } break;
+  }
+
   return (
     <>
       <main className="bf-main-homepage">
@@ -123,8 +139,7 @@ const HomePage = () => {
                     <LinkIcon 
                       mdil={link.icon} 
                       link={link.name} 
-                      selected={selectedSidebar === idx} 
-                      setSelected={() => setSelectedSidebar(idx)} 
+                      selected={idx === selected}
                     />
                   </li>
                 );
@@ -132,11 +147,11 @@ const HomePage = () => {
             }
           </ul>
 
-          <LinkIcon mdil={mdilAccount} link="account" selected={selectedSidebar === 3} setSelected={ () => setSelectedSidebar(3) }/>
+          <LinkIcon mdil={mdilAccount} link="account" selected={selected === 3} />
         </section> 
         <section className="bf-content-display-area">
           <header className="bf-header">
-            <h1 className="bf-page-title">{sidebarNames[selectedSidebar]}</h1>
+            <h1 className="bf-page-title">{sidebarNames[selected]}</h1>
           </header>
           
           <section className="bf-main-display" style={{maxHeight: maxContainerHeight}}>
