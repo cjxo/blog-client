@@ -1,3 +1,9 @@
+const geturl = () => {
+  console.log(import.meta.env.MODE);
+};
+
+console.log(import.meta.env.MODE);
+
 const signin = async (username, password) => {
   const result = { ok: true, message: "Successfully Signed In.", accessToken: null };
   try {
