@@ -1,13 +1,17 @@
-const geturl = () => {
-  console.log(import.meta.env.MODE);
-};
+const geturl = (rel) => {
+  if (import.meta.env.MODE === "development") {
+    return "http://localhost:3000" + rel;
+  } else {
+    return "https://blog-api-h5zn.onrender.com" + rel;
+  }
+}
 
 console.log(import.meta.env.MODE);
 
 const signin = async (username, password) => {
   const result = { ok: true, message: "Successfully Signed In.", accessToken: null };
   try {
-    const response = await fetch("http://localhost:3000/auth/sign-in", {
+    const response = await fetch(geturl("/auth/sign-in"), {
       mode: "cors",
       method: "POST",
       credentials: "include",
@@ -41,7 +45,7 @@ const signin = async (username, password) => {
 const signup = async (firstName, lastName, username, email, password) => {
   const result = { ok: true, message: "Successfully Signed Up." };
   try {
-    const response = await fetch("http://localhost:3000/auth/sign-up", {
+    const response = await fetch(geturl("/auth/sign-up"), {
       mode: "cors",
       method: "POST",
       headers: {
@@ -75,7 +79,7 @@ const signup = async (firstName, lastName, username, email, password) => {
 const getAccessToken = async () => {
   const result = { ok: true, message: "Success", accessToken: null, userId: 0, username: "" };
   try {
-    const response = await fetch ("http://localhost:3000/auth/token", {
+    const response = await fetch(geturl("/auth/token"), {
       mode: "cors",
       method: "POST",
       credentials: "include",
@@ -102,7 +106,7 @@ const getAccessToken = async () => {
 const signout = async () => {
   const result = { ok: true, message: "Success" };
   try {
-    const response = await fetch("http://localhost:3000/auth/sign-out", {
+    const response = await fetch(geturl("/auth/sign-out"), {
       mode: "cors",
       method: "DELETE",
       credentials: "include",
@@ -132,7 +136,7 @@ const acquireEntirePosts = async () => {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/posts", {
+    const response = await fetch(geturl("/posts"), {
       mode: "cors",
       credentials: "include",
       method: "GET",
@@ -163,7 +167,7 @@ const acquirePostFromUserId = async (id, filterBy) => {
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/user/${id}/posts?filterBy=${filterBy}`, {
+    const response = await fetch(geturl(`/user/${id}/posts?filterBy=${filterBy}`), {
       mode: "cors",
       method: "GET",
     });
@@ -191,7 +195,7 @@ const createPost = async (title, content, published, token) => {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/posts", {
+    const response = await fetch(geturl("/posts"), {
       mode: "cors",
       credentials: "include",
       method: "POST",
@@ -226,7 +230,7 @@ const postComment = async (token, post_id, commentContent) => {
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/posts/${post_id}/comment`, {
+    const response = await fetch(geturl(`/posts/${post_id}/comment`), {
       method: "POST",
       credentials: "include",
       mode: "cors",
@@ -264,7 +268,7 @@ const getAllComments = async (token, post_id) => {
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/posts/${post_id}/comments`, {
+    const response = await fetch(geturl(`/posts/${post_id}/comments`), {
       method: "GET",
       credentials: "include",
       mode: "cors",
@@ -301,7 +305,7 @@ const toggleLikeDislike = async (token, post_id, comment_id, type) => {
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/posts/${post_id}/comment/${comment_id}/like`, {
+    const response = await fetch(geturl(`/posts/${post_id}/comment/${comment_id}/like`), {
       method: "POST",
       credentials: "include",
       mode: "cors",
@@ -342,7 +346,7 @@ const setPostStatistics = async (token, post_id, statisticsToSet) => {
   };
 
   try {
-    const response = await fetch (`http://localhost:3000/posts/${post_id}/statistics`, {
+    const response = await fetch (geturl(`/posts/${post_id}/statistics`), {
       mode: "cors",
       credentials: "include",
       method: "PUT",
@@ -386,7 +390,7 @@ const getPostStatistics = async (token, post_id) => {
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/posts/${post_id}/statistics`, {
+    const response = await fetch(geturl(`/posts/${post_id}/statistics`), {
       method: "GET",
       credentials: "include",
       mode: "cors",
@@ -421,7 +425,7 @@ const editUserDetail = async (token, newUname) => {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/auth/edit", {
+    const response = await fetch(geturl("/auth/edit"), {
       mode: "cors",
       credentials: "include",
       method: "POST",
@@ -453,7 +457,7 @@ const deletePost = async (token, post_id) => {
   };
   
   try {
-    const response = await fetch(`http://localhost:3000/posts/${post_id}`, {
+    const response = await fetch(geturl(`/posts/${post_id}`), {
       method: "DELETE",
       credentials: "include",
       mode: "cors",
