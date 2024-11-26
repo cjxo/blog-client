@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -13,11 +13,11 @@ function FeatureLiEntry({ title, explanation }) {
     <li className="bf-homepage-feature-desc">
       <h4 className="bf-homepage-feature-heading">{ title }</h4>
       <p>{ explanation }</p>
-      <a
+      <Link
         className="bf-button-link-feature-create-your-blog"
-        href="#">
+        to="/sign-up">
         Create Your Blog
-      </a>
+      </Link>
     </li>
   );
 }
