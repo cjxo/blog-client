@@ -1,7 +1,7 @@
 {
   "name": "blog-api-front-end",
   "private": true,
-  "homepage": "https://cjxo.github.io/blog-client",
+  "homepage": "https://cjxo.github.io/blog-client/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
