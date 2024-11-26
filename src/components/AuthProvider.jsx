@@ -23,7 +23,13 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const key = setInterval(() => {
+      fetchAccessToken();
+    }, 14 * 60 * 1000);
+
     fetchAccessToken();
+
+    return () => clearInterval(key);
   }, [token]);
 
   const signin = async (username, password) => {

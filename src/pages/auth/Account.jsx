@@ -36,6 +36,7 @@ const AccountPage = () => {
           });
       } else {
         setEditMode(false);
+        setErrorMsg("");
       }
     } else {
       setEditMode(true);
