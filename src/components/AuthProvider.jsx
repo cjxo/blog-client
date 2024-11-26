@@ -16,6 +16,9 @@ const AuthProvider = ({ children }) => {
 
   const fetchAccessToken = async () => {
     const result = await api.getAccessToken();
+    if (!result.ok) {
+      console.error(result.message);
+    }
     setToken(result.accessToken);
     setLoading(false);
     setUser({ id: result.userId, name: result.username });
